@@ -31,6 +31,13 @@ import {
   AlertCircle,
   CheckCircle,
   Timer,
+  Newspaper,
+  ExternalLink,
+  ArrowUpRight,
+  ArrowDownRight,
+  Minus,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -126,7 +133,44 @@ type GmailDeal = {
   summary: string;
 };
 
-type ActiveTab = "memo" | "gmail";
+type ActiveTab = "memo" | "gmail" | "research";
+
+type ResearchCompany = {
+  name: string;
+  ticker: string;
+  price: number | null;
+  change: string;
+  changePercent: string;
+  marketCap: string;
+  peRatio: string;
+  sector: string;
+  fiftyTwoWeekRange: string;
+  volume: string;
+  avgVolume: string;
+};
+
+type ResearchNews = {
+  id: string;
+  title: string;
+  summary: string;
+  source: string;
+  timestamp: string;
+  url: string;
+  category: "market" | "company" | "analysis" | "insight";
+  sentiment: "positive" | "negative" | "neutral";
+  ticker?: string;
+};
+
+type ResearchResult = {
+  id: string;
+  query: string;
+  timestamp: string;
+  companies: ResearchCompany[];
+  news: ResearchNews[];
+  aiSummary: string;
+  status: "success" | "error";
+  error?: string;
+};
 
 export default function Home() {
   const [pdfFile, setPdfFile] = useState<UploadedFile | null>(null);
@@ -149,6 +193,12 @@ export default function Home() {
   const [autoScan, setAutoScan] = useState(false);
   const autoScanRef = useRef(false);
   const isCrawlingRef = useRef(false);
+
+  // Stay Tuned / Research state
+  const [researchQuery, setResearchQuery] = useState("");
+  const [isResearching, setIsResearching] = useState(false);
+  const [researchResults, setResearchResults] = useState<ResearchResult[]>([]);
+  const [activeResearchIndex, setActiveResearchIndex] = useState<number | null>(null);
 
   // Keep refs in sync so the interval callback sees latest values
   useEffect(() => { autoScanRef.current = autoScan; }, [autoScan]);
@@ -245,6 +295,26 @@ export default function Home() {
       // handle error
     } finally {
       setIsCrawling(false);
+    }
+  };
+
+  const handleResearch = async () => {
+    if (!researchQuery.trim() || isResearching) return;
+    setIsResearching(true);
+    try {
+      const res = await fetch("/api/openclaw/research", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: researchQuery.trim() }),
+      });
+      const data = await res.json();
+      setResearchResults((prev) => [data, ...prev]);
+      setActiveResearchIndex(0);
+      setResearchQuery("");
+    } catch {
+      // silently fail
+    } finally {
+      setIsResearching(false);
     }
   };
 
@@ -699,6 +769,20 @@ export default function Home() {
                   <Badge variant="outline" className="ml-1 text-xs px-2 py-0.5">{gmailScans.length}</Badge>
                 )}
               </button>
+              <button
+                onClick={() => setActiveTab("research")}
+                className={`flex items-center gap-2 px-6 py-3 text-base font-semibold border-b-2 transition-all -mb-[2px] ${
+                  activeTab === "research"
+                    ? "border-primary text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border/60"
+                }`}
+              >
+                <Newspaper className="h-5 w-5" />
+                Stay Tuned
+                {researchResults.length > 0 && (
+                  <Badge variant="outline" className="ml-1 text-xs px-2 py-0.5">{researchResults.length}</Badge>
+                )}
+              </button>
             </div>
 
             {/* Contextual Header */}
@@ -720,6 +804,19 @@ export default function Home() {
                       {deals.length} deal{deals.length !== 1 ? "s" : ""}
                     </Badge>
                   )}
+                </>
+              ) : activeTab === "research" ? (
+                <>
+                  <div>
+                    <h2 className="text-3xl font-bold tracking-tight">Stay Tuned</h2>
+                    <p className="text-base text-muted-foreground mt-1">
+                      Search any company or topic for live market data &amp; news
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="gap-2 text-base px-4 py-2">
+                    <Sparkles className="h-4 w-4" />
+                    {researchResults.length} search{researchResults.length !== 1 ? "es" : ""}
+                  </Badge>
                 </>
               ) : (
                 <>
@@ -1289,6 +1386,276 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+            </div>
+          </div>
+          )}
+
+          {/* Stay Tuned / Research Content */}
+          {activeTab === "research" && (
+          <div className="flex-1 overflow-y-auto">
+            <div className="mx-auto max-w-5xl px-10 py-8">
+
+              {/* Search Bar */}
+              <div className="mb-8">
+                <div className="flex gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <input
+                      type="text"
+                      value={researchQuery}
+                      onChange={(e) => setResearchQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleResearch()}
+                      placeholder="Search a company, ticker, or topic... (e.g. Tesla, AAPL, AI startups)"
+                      className="w-full rounded-xl border border-border/40 bg-background/50 pl-12 pr-4 py-4 text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
+                      disabled={isResearching}
+                    />
+                  </div>
+                  <Button
+                    size="lg"
+                    className="gap-3 rounded-xl text-base font-bold px-8 py-5"
+                    onClick={handleResearch}
+                    disabled={isResearching || !researchQuery.trim()}
+                  >
+                    {isResearching ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        Searching...
+                      </>
+                    ) : (
+                      <>
+                        <Search className="h-5 w-5" />
+                        Research
+                      </>
+                    )}
+                  </Button>
+                </div>
+                <div className="flex gap-2 mt-3">
+                  {["AAPL", "TSLA", "NVDA", "MSFT", "ISRG", "AI startups"].map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      onClick={() => { setResearchQuery(suggestion); }}
+                      className="rounded-lg border border-border/30 bg-muted/20 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-colors"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Loading State */}
+              {isResearching && (
+                <div className="mb-8 rounded-xl border border-violet-500/30 bg-violet-500/10 p-6">
+                  <div className="flex items-center gap-4">
+                    <Loader2 className="h-6 w-6 text-violet-400 animate-spin" />
+                    <div>
+                      <p className="text-lg font-semibold text-violet-300">Researching &quot;{researchQuery}&quot;...</p>
+                      <p className="text-base text-violet-300/60">Querying Yahoo Finance, Alpha Vantage, and Claude AI</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Results */}
+              {researchResults.length === 0 && !isResearching ? (
+                <div className="rounded-xl border border-dashed border-border/40 bg-muted/10 p-16 text-center">
+                  <Newspaper className="mx-auto h-12 w-12 text-muted-foreground/30 mb-4" />
+                  <p className="text-xl font-medium text-muted-foreground/60">No research yet</p>
+                  <p className="text-base text-muted-foreground/40 mt-2">
+                    Search for any company or topic to get live market data, news, and AI analysis
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {researchResults.map((result, idx) => (
+                    <div
+                      key={result.id}
+                      className={`rounded-xl border transition-all ${
+                        activeResearchIndex === idx
+                          ? "border-primary/40 bg-primary/5"
+                          : "border-border/20 bg-card/30"
+                      }`}
+                    >
+                      {/* Result Header */}
+                      <button
+                        onClick={() => setActiveResearchIndex(activeResearchIndex === idx ? null : idx)}
+                        className="w-full text-left px-6 py-5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-violet-500/15">
+                              <Search className="h-5 w-5 text-violet-400" />
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold">&quot;{result.query}&quot;</h3>
+                              <p className="text-sm text-muted-foreground">
+                                {new Date(result.timestamp).toLocaleString()} · {result.companies.length} companies · {result.news.length} articles
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {result.companies.length > 0 && (
+                              <Badge variant="outline" className="border-blue-500/40 text-blue-400 text-sm">
+                                {result.companies.length} ticker{result.companies.length !== 1 ? "s" : ""}
+                              </Badge>
+                            )}
+                            <Badge
+                              variant="outline"
+                              className={`text-sm ${
+                                result.status === "success"
+                                  ? "border-emerald-500/30 text-emerald-400"
+                                  : "border-red-500/30 text-red-400"
+                              }`}
+                            >
+                              {result.status}
+                            </Badge>
+                          </div>
+                        </div>
+                      </button>
+
+                      {/* Expanded Result */}
+                      {activeResearchIndex === idx && (
+                        <div className="px-6 pb-6 space-y-6">
+                          <Separator className="opacity-30" />
+
+                          {/* Company Ticker Cards */}
+                          {result.companies.length > 0 && (
+                            <div>
+                              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Market Data</h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                {result.companies.map((company) => {
+                                  const isPositive = company.change.startsWith("+");
+                                  const isNegative = company.change.startsWith("-");
+                                  return (
+                                    <div key={company.ticker} className="rounded-xl border border-border/20 bg-background/50 p-4">
+                                      <div className="flex items-center justify-between mb-3">
+                                        <div>
+                                          <p className="text-base font-bold">{company.ticker}</p>
+                                          <p className="text-sm text-muted-foreground truncate max-w-[150px]">{company.name}</p>
+                                        </div>
+                                        <div className={`flex items-center gap-1 text-sm font-bold ${
+                                          isPositive ? "text-emerald-400" : isNegative ? "text-red-400" : "text-muted-foreground"
+                                        }`}>
+                                          {isPositive ? <ArrowUpRight className="h-4 w-4" /> : isNegative ? <ArrowDownRight className="h-4 w-4" /> : <Minus className="h-4 w-4" />}
+                                          {company.changePercent}
+                                        </div>
+                                      </div>
+                                      <p className="text-2xl font-bold mb-3">
+                                        {company.price != null ? `$${company.price.toFixed(2)}` : "N/A"}
+                                      </p>
+                                      <div className="grid grid-cols-2 gap-2 text-sm">
+                                        <div>
+                                          <p className="text-muted-foreground">Mkt Cap</p>
+                                          <p className="font-semibold">{company.marketCap}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-muted-foreground">P/E</p>
+                                          <p className="font-semibold">{company.peRatio}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-muted-foreground">Volume</p>
+                                          <p className="font-semibold">{company.volume}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-muted-foreground">Sector</p>
+                                          <p className="font-semibold truncate">{company.sector}</p>
+                                        </div>
+                                      </div>
+                                      <div className="mt-2 text-sm">
+                                        <p className="text-muted-foreground">52-Wk Range</p>
+                                        <p className="font-semibold">{company.fiftyTwoWeekRange}</p>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* AI Summary */}
+                          {result.aiSummary && (
+                            <div>
+                              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+                                <Sparkles className="h-4 w-4 text-violet-400" />
+                                AI Analysis
+                              </h4>
+                              <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-5">
+                                <article className="prose dark:prose-invert prose-base max-w-none prose-headings:font-bold prose-headings:text-foreground prose-p:text-foreground/80 prose-strong:text-foreground prose-li:text-foreground/80">
+                                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                    {result.aiSummary}
+                                  </ReactMarkdown>
+                                </article>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* News Feed */}
+                          {result.news.length > 0 && (
+                            <div>
+                              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+                                <Newspaper className="h-4 w-4 text-blue-400" />
+                                News Feed ({result.news.length})
+                              </h4>
+                              <div className="space-y-3">
+                                {result.news.map((article) => (
+                                  <a
+                                    key={article.id}
+                                    href={article.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block rounded-xl border border-border/20 bg-background/50 p-4 hover:bg-muted/20 transition-colors group"
+                                  >
+                                    <div className="flex items-start justify-between gap-4">
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-1.5">
+                                          <Badge
+                                            variant="outline"
+                                            className={`text-xs ${
+                                              article.sentiment === "positive"
+                                                ? "border-emerald-500/30 text-emerald-400"
+                                                : article.sentiment === "negative"
+                                                ? "border-red-500/30 text-red-400"
+                                                : "border-border/40 text-muted-foreground"
+                                            }`}
+                                          >
+                                            {article.sentiment === "positive" ? "Bullish" : article.sentiment === "negative" ? "Bearish" : "Neutral"}
+                                          </Badge>
+                                          <span className="text-xs text-muted-foreground">{article.source}</span>
+                                          {article.ticker && (
+                                            <Badge variant="outline" className="text-xs border-blue-500/30 text-blue-400">
+                                              {article.ticker}
+                                            </Badge>
+                                          )}
+                                        </div>
+                                        <h5 className="text-base font-semibold group-hover:text-primary transition-colors line-clamp-2">
+                                          {article.title}
+                                        </h5>
+                                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                                          {article.summary}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground/50 mt-2">
+                                          {new Date(article.timestamp).toLocaleString()}
+                                        </p>
+                                      </div>
+                                      <ExternalLink className="h-4 w-4 text-muted-foreground/30 group-hover:text-primary shrink-0 mt-1 transition-colors" />
+                                    </div>
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Error */}
+                          {result.error && (
+                            <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-base text-red-400">
+                              Error: {result.error}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
