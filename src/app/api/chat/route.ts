@@ -8,6 +8,40 @@ type ChatMessage = {
   content: string;
 };
 
+async function callWithRetry(
+  params: Anthropic.MessageCreateParams,
+  retries = 2
+): Promise<Anthropic.Message> {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      return await anthropic.messages.create(params);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      // On rate limit, try fallback model once
+      if (msg.includes("rate_limit") && attempt === 0) {
+        const fallbackModel = params.model === "claude-sonnet-4-20250514"
+          ? "claude-opus-4-20250514"
+          : params.model;
+        if (fallbackModel !== params.model) {
+          try {
+            return await anthropic.messages.create({ ...params, model: fallbackModel });
+          } catch {
+            throw err; // fallback also failed, throw original
+          }
+        }
+        throw err;
+      }
+      // Retry other transient errors
+      if (attempt < retries - 1) {
+        await new Promise((r) => setTimeout(r, 2000));
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error("Max retries exceeded");
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -25,9 +59,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Limit history to last 10 messages to reduce token usage
+    const recentHistory = (history || []).slice(-10);
+
     // Build conversation history for multi-turn chat
     const messages: ChatMessage[] = [
-      ...(history || []),
+      ...recentHistory,
       { role: "user" as const, content: message },
     ];
 
@@ -40,24 +77,15 @@ Be concise, data-driven, and direct. When the user asks about specifics, referen
 Format replies for readability — use short paragraphs and bullet points where appropriate.
 
 --- INVESTMENT MEMO ---
-${memo.slice(0, 12000)}
+${memo.slice(0, 8000)}
 --- END MEMO ---`
-      : `You are Diligent-AI, a live finance and investment assistant built for venture capitalists and traders. You have deep expertise in:
+      : `You are Diligent-AI, a live finance and investment assistant for VCs and traders. You have expertise in public markets, venture capital, financial analysis (DCF, comps, LBO), trading, company research, and regulation.
 
-- **Public markets**: stocks, ETFs, indices, options, commodities, crypto
-- **Venture capital**: startup evaluation, due diligence, cap tables, term sheets
-- **Financial analysis**: DCF, comparable analysis, LBO, revenue modeling
-- **Trading**: technical analysis, fundamentals, market sentiment, macro trends
-- **Company research**: competitive landscape, TAM/SAM/SOM, management assessment
-- **Regulation**: SEC filings, IPO process, compliance
+Answer concisely and accurately. Use financial terminology. Caveat that you are an AI and this is not financial advice. Use short paragraphs and bullet points.`;
 
-Answer questions concisely and accurately. Use real financial terminology. When giving opinions on investments, always caveat that you are an AI assistant and this is not financial advice. Format replies for readability with short paragraphs and bullet points.
-
-If someone asks about a specific stock or company, share what you know about their business model, competitive position, recent performance, and key metrics. Be direct and data-driven.`;
-
-    const response = await anthropic.messages.create({
+    const response = await callWithRetry({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 2048,
+      max_tokens: 1024,
       system: systemPrompt,
       messages,
     });
@@ -68,9 +96,15 @@ If someone asks about a specific stock or company, share what you know about the
     return NextResponse.json({ reply });
   } catch (error) {
     console.error("Chat API error:", error);
+    const isRateLimit =
+      error instanceof Error && error.message.includes("rate_limit");
     return NextResponse.json(
-      { error: "Failed to generate response." },
-      { status: 500 }
+      {
+        error: isRateLimit
+          ? "Rate limited — please wait a moment and try again."
+          : "Failed to generate response.",
+      },
+      { status: isRateLimit ? 429 : 500 }
     );
   }
 }

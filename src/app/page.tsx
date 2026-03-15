@@ -799,7 +799,9 @@ export default function Home() {
       });
 
       const data = await res.json();
-      const reply = data.reply || "Sorry, I couldn't generate a response.";
+      const reply = res.ok
+        ? (data.reply || "Sorry, I couldn't generate a response.")
+        : (data.error || "Sorry, something went wrong. Please try again.");
 
       if (isDealChat) {
         setDeals((prev) =>
