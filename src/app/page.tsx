@@ -557,13 +557,13 @@ export default function Home() {
                 key={mode}
                 onClick={() => setTheme(mode)}
                 title={label}
-                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-base font-medium transition-all ${
                   theme === mode
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-5 w-5" />
                 {label}
               </button>
             ))}
@@ -736,14 +736,14 @@ export default function Home() {
                           </div>
                           <div className="min-w-0">
                             <p className="text-base font-semibold truncate">{deal.companyName}</p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-base text-muted-foreground">
                               {deal.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · {deal.mode === "full" ? "Full" : "Pitch"}
                             </p>
                           </div>
                         </div>
                         <Badge
                           variant="outline"
-                          className={`shrink-0 text-sm font-bold px-3 py-1 ${
+                          className={`shrink-0 text-base font-bold px-3 py-1.5 ${
                             deal.verdict === "STRONG BUY" ? "border-emerald-500/40 text-emerald-400"
                               : deal.verdict === "BUY" ? "border-green-500/40 text-green-400"
                               : deal.verdict === "HOLD" ? "border-amber-500/40 text-amber-400"
@@ -763,7 +763,7 @@ export default function Home() {
 
           {/* Sidebar Footer */}
           <div className="border-t-2 border-border/40 px-6 py-4">
-            <p className="text-sm text-muted-foreground/50 text-center">Edinburgh AI Hackathon 2026</p>
+            <p className="text-base text-muted-foreground/50 text-center">Edinburgh AI Hackathon 2026</p>
           </div>
         </aside>
 
@@ -795,7 +795,7 @@ export default function Home() {
                 <Mail className="h-5 w-5" />
                 Gmail Updates
                 {gmailScans.length > 0 && (
-                  <Badge variant="outline" className="ml-1 text-xs px-2 py-0.5">{gmailScans.length}</Badge>
+                  <Badge variant="outline" className="ml-1 text-sm px-2.5 py-0.5">{gmailScans.length}</Badge>
                 )}
               </button>
               <button
@@ -809,7 +809,7 @@ export default function Home() {
                 <Newspaper className="h-5 w-5" />
                 Stay Tuned
                 {researchResults.length > 0 && (
-                  <Badge variant="outline" className="ml-1 text-xs px-2 py-0.5">{researchResults.length}</Badge>
+                  <Badge variant="outline" className="ml-1 text-sm px-2.5 py-0.5">{researchResults.length}</Badge>
                 )}
               </button>
             </div>
@@ -938,19 +938,19 @@ export default function Home() {
                         {activeDeal.sourceData.pitchData ? (
                           <div className="grid grid-cols-2 gap-4 mt-4">
                             <div className="rounded-lg bg-background/50 px-4 py-3">
-                              <p className="text-sm font-medium text-muted-foreground">Company</p>
+                              <p className="text-base font-medium text-muted-foreground">Company</p>
                               <p className="text-lg font-semibold">{activeDeal.sourceData.pitchData.companyName}</p>
                             </div>
                             <div className="rounded-lg bg-background/50 px-4 py-3">
-                              <p className="text-sm font-medium text-muted-foreground">Sector</p>
+                              <p className="text-base font-medium text-muted-foreground">Sector</p>
                               <p className="text-lg font-semibold">{activeDeal.sourceData.pitchData.sector || "N/A"}</p>
                             </div>
                             <div className="rounded-lg bg-background/50 px-4 py-3">
-                              <p className="text-sm font-medium text-muted-foreground">Stage</p>
+                              <p className="text-base font-medium text-muted-foreground">Stage</p>
                               <p className="text-lg font-semibold">{activeDeal.sourceData.pitchData.stage || "N/A"}</p>
                             </div>
                             <div className="rounded-lg bg-background/50 px-4 py-3">
-                              <p className="text-sm font-medium text-muted-foreground">Competitors Identified</p>
+                              <p className="text-base font-medium text-muted-foreground">Competitors Identified</p>
                               <p className="text-lg font-semibold">{activeDeal.sourceData.pitchData.mainCompetitors?.join(", ") || "None"}</p>
                             </div>
                           </div>
@@ -975,12 +975,12 @@ export default function Home() {
                             <table className="w-full text-left">
                               <thead>
                                 <tr className="border-b border-border/30">
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Ticker</th>
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Company</th>
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Price</th>
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Market Cap</th>
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">P/E</th>
-                                  <th className="pb-3 text-sm font-semibold text-muted-foreground">52W Range</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Ticker</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Company</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Price</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Market Cap</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">P/E</th>
+                                  <th className="pb-3 text-base font-semibold text-muted-foreground">52W Range</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -1018,11 +1018,11 @@ export default function Home() {
                             <table className="w-full text-left">
                               <thead>
                                 <tr className="border-b border-border/30">
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Ticker</th>
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Annual Revenue</th>
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Net Income</th>
-                                  <th className="pb-3 pr-4 text-sm font-semibold text-muted-foreground">Revenue Growth</th>
-                                  <th className="pb-3 text-sm font-semibold text-muted-foreground">EPS</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Ticker</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Annual Revenue</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Net Income</th>
+                                  <th className="pb-3 pr-4 text-base font-semibold text-muted-foreground">Revenue Growth</th>
+                                  <th className="pb-3 text-base font-semibold text-muted-foreground">EPS</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -1145,7 +1145,7 @@ export default function Home() {
                         </div>
                         <div>
                           <h4 className="text-lg font-bold">Yahoo Finance</h4>
-                          <p className="text-sm text-muted-foreground">Real-time market quotes</p>
+                          <p className="text-base text-muted-foreground">Real-time market quotes</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
@@ -1158,8 +1158,8 @@ export default function Home() {
                           { label: "52-Week Range", desc: "Price high / low" },
                         ].map((item) => (
                           <div key={item.label} className="rounded-lg bg-background/50 px-4 py-3">
-                            <p className="text-sm font-semibold">{item.label}</p>
-                            <p className="text-xs text-muted-foreground">{item.desc}</p>
+                            <p className="text-base font-semibold">{item.label}</p>
+                            <p className="text-sm text-muted-foreground">{item.desc}</p>
                           </div>
                         ))}
                       </div>
@@ -1173,7 +1173,7 @@ export default function Home() {
                         </div>
                         <div>
                           <h4 className="text-lg font-bold">Alpha Vantage</h4>
-                          <p className="text-sm text-muted-foreground">Income statement fundamentals</p>
+                          <p className="text-base text-muted-foreground">Income statement fundamentals</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
@@ -1184,8 +1184,8 @@ export default function Home() {
                           { label: "Earnings Per Share", desc: "Reported EPS" },
                         ].map((item) => (
                           <div key={item.label} className="rounded-lg bg-background/50 px-4 py-3">
-                            <p className="text-sm font-semibold">{item.label}</p>
-                            <p className="text-xs text-muted-foreground">{item.desc}</p>
+                            <p className="text-base font-semibold">{item.label}</p>
+                            <p className="text-sm text-muted-foreground">{item.desc}</p>
                           </div>
                         ))}
                       </div>
@@ -1199,10 +1199,10 @@ export default function Home() {
                         </div>
                         <div>
                           <h4 className="text-lg font-bold">Claude AI (Sonnet)</h4>
-                          <p className="text-sm text-muted-foreground">Pitch deck parsing &amp; memo generation</p>
+                          <p className="text-base text-muted-foreground">Pitch deck parsing &amp; memo generation</p>
                         </div>
                       </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-base text-muted-foreground leading-relaxed">
                         Extracts company name, product, sector, competitors (as tickers), TAM, funding ask, team highlights, and key metrics. Then combines all data sources into a structured investment memo with a BUY / HOLD / PASS verdict.
                       </p>
                     </div>
@@ -1241,7 +1241,7 @@ export default function Home() {
                     </div>
                     <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Scans</p>
                   </div>
-                  <p className="text-3xl font-bold">{gmailScans.length}</p>
+                  <p className="text-4xl font-bold">{gmailScans.length}</p>
                 </div>
                 <div className="rounded-xl border border-border/30 bg-card/50 p-5">
                   <div className="flex items-center gap-3 mb-2">
@@ -1250,7 +1250,7 @@ export default function Home() {
                     </div>
                     <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Deals Found</p>
                   </div>
-                  <p className="text-3xl font-bold">{gmailDeals.length}</p>
+                  <p className="text-4xl font-bold">{gmailDeals.length}</p>
                 </div>
                 <div className="rounded-xl border border-border/30 bg-card/50 p-5">
                   <div className="flex items-center gap-3 mb-2">
@@ -1259,7 +1259,7 @@ export default function Home() {
                     </div>
                     <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Gmail</p>
                   </div>
-                  <p className="text-lg font-bold truncate">{gmailConfigured ? gmailUser : "Not configured"}</p>
+                  <p className="text-xl font-bold truncate">{gmailConfigured ? gmailUser : "Not configured"}</p>
                 </div>
               </div>
 
@@ -1335,7 +1335,7 @@ export default function Home() {
                             )}
                             {scan.analyses.length > 0 && (
                               <div className="space-y-2 mb-3">
-                                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Analyzed Decks</p>
+                              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Analyzed Decks</p>
                                 {scan.analyses.map((a, i) => (
                                   <div key={i} className="flex items-center justify-between rounded-lg bg-background/50 px-4 py-3">
                                     <div>
@@ -1360,10 +1360,10 @@ export default function Home() {
                             )}
                             {scan.emails.length > 0 && (
                               <div>
-                                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Emails Scanned ({scan.emails.length})</p>
+                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Emails Scanned ({scan.emails.length})</p>
                                 <div className="max-h-[300px] overflow-y-auto space-y-1">
                                   {scan.emails.map((email) => (
-                                    <div key={email.uid} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm">
+                                    <div key={email.uid} className="flex items-center gap-3 rounded-lg px-3 py-2 text-base">
                                       <div className={`h-2 w-2 rounded-full ${email.isPitch ? "bg-emerald-400" : email.hasPdf ? "bg-amber-400" : "bg-muted-foreground/30"}`} />
                                       <span className="text-muted-foreground min-w-[180px] truncate">{email.from}</span>
                                       <span className="truncate flex-1">{email.subject}</span>
@@ -1467,7 +1467,7 @@ export default function Home() {
                     <button
                       key={suggestion}
                       onClick={() => { setResearchQuery(suggestion); }}
-                      className="rounded-lg border border-border/30 bg-muted/20 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-colors"
+                      className="rounded-lg border border-border/30 bg-muted/20 px-4 py-2 text-base text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-colors"
                     >
                       {suggestion}
                     </button>
@@ -1565,17 +1565,17 @@ export default function Home() {
                                           <p className="text-base font-bold">{company.ticker}</p>
                                           <p className="text-sm text-muted-foreground truncate max-w-[150px]">{company.name}</p>
                                         </div>
-                                        <div className={`flex items-center gap-1 text-sm font-bold ${
+                                        <div className={`flex items-center gap-1 text-base font-bold ${
                                           isPositive ? "text-emerald-400" : isNegative ? "text-red-400" : "text-muted-foreground"
                                         }`}>
                                           {isPositive ? <ArrowUpRight className="h-4 w-4" /> : isNegative ? <ArrowDownRight className="h-4 w-4" /> : <Minus className="h-4 w-4" />}
                                           {company.changePercent}
                                         </div>
                                       </div>
-                                      <p className="text-2xl font-bold mb-3">
+                                      <p className="text-3xl font-bold mb-3">
                                         {company.price != null ? `$${company.price.toFixed(2)}` : "N/A"}
                                       </p>
-                                      <div className="grid grid-cols-2 gap-2 text-sm">
+                                      <div className="grid grid-cols-2 gap-2 text-base">
                                         <div>
                                           <p className="text-muted-foreground">Mkt Cap</p>
                                           <p className="font-semibold">{company.marketCap}</p>
@@ -1593,7 +1593,7 @@ export default function Home() {
                                           <p className="font-semibold truncate">{company.sector}</p>
                                         </div>
                                       </div>
-                                      <div className="mt-2 text-sm">
+                                      <div className="mt-2 text-base">
                                         <p className="text-muted-foreground">52-Wk Range</p>
                                         <p className="font-semibold">{company.fiftyTwoWeekRange}</p>
                                       </div>
@@ -1642,7 +1642,7 @@ export default function Home() {
                                         <div className="flex items-center gap-2 mb-1.5">
                                           <Badge
                                             variant="outline"
-                                            className={`text-xs ${
+                                            className={`text-sm ${
                                               article.sentiment === "positive"
                                                 ? "border-emerald-500/30 text-emerald-400"
                                                 : article.sentiment === "negative"
@@ -1652,20 +1652,20 @@ export default function Home() {
                                           >
                                             {article.sentiment === "positive" ? "Bullish" : article.sentiment === "negative" ? "Bearish" : "Neutral"}
                                           </Badge>
-                                          <span className="text-xs text-muted-foreground">{article.source}</span>
+                                          <span className="text-sm text-muted-foreground">{article.source}</span>
                                           {article.ticker && (
-                                            <Badge variant="outline" className="text-xs border-blue-500/30 text-blue-400">
+                                            <Badge variant="outline" className="text-sm border-blue-500/30 text-blue-400">
                                               {article.ticker}
                                             </Badge>
                                           )}
                                         </div>
-                                        <h5 className="text-base font-semibold group-hover:text-primary transition-colors line-clamp-2">
+                                        <h5 className="text-lg font-semibold group-hover:text-primary transition-colors line-clamp-2">
                                           {article.title}
                                         </h5>
-                                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                                        <p className="text-base text-muted-foreground mt-1 line-clamp-2">
                                           {article.summary}
                                         </p>
-                                        <p className="text-xs text-muted-foreground/50 mt-2">
+                                        <p className="text-sm text-muted-foreground/50 mt-2">
                                           {new Date(article.timestamp).toLocaleString()}
                                         </p>
                                       </div>
@@ -1700,17 +1700,17 @@ export default function Home() {
             <>
               {/* Founder Intel Header */}
               <div className="flex items-center gap-4 border-b-2 border-border/40 px-6 py-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-500/15">
-                  <ShieldAlert className="h-6 w-6 text-rose-400" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-rose-500/15">
+                  <ShieldAlert className="h-7 w-7 text-rose-400" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-lg font-bold truncate">Founder Intel</h3>
+                  <h3 className="text-xl font-bold truncate">Founder Intel</h3>
                   <p className="text-base text-muted-foreground">Background check &amp; verification</p>
                 </div>
                 {activeDeal.sourceData?.founderIntel && (
                   <Badge
                     variant="outline"
-                    className={`text-xs px-2 py-0.5 whitespace-nowrap ${
+                    className={`text-sm px-3 py-1 whitespace-nowrap ${
                       activeDeal.sourceData.founderIntel.overallRiskLevel === "low"
                         ? "border-emerald-500/40 text-emerald-400"
                         : activeDeal.sourceData.founderIntel.overallRiskLevel === "medium"
@@ -1725,35 +1725,35 @@ export default function Home() {
               </div>
 
               {/* Founder Intel Content */}
-              <div className="flex-1 overflow-y-auto p-5 space-y-4">
+              <div className="flex-1 overflow-y-auto p-5 space-y-5">
                 {activeDeal.sourceData?.founderIntel ? (
                   <>
                     {/* Summary */}
-                    <div className="rounded-xl border border-slate-500/20 bg-slate-500/5 p-4">
-                      <p className="text-sm leading-relaxed">{activeDeal.sourceData.founderIntel.summary}</p>
+                    <div className="rounded-xl border border-slate-500/20 bg-slate-500/5 p-5">
+                      <p className="text-base leading-relaxed">{activeDeal.sourceData.founderIntel.summary}</p>
                     </div>
 
                     {/* Founder Profiles */}
                     {activeDeal.sourceData.founderIntel.founders.length > 0 && (
                       <div className="space-y-3">
-                        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Founder Profiles</h4>
+                        <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Founder Profiles</h4>
                         {activeDeal.sourceData.founderIntel.founders.map((founder, idx) => (
-                          <div key={idx} className={`rounded-xl border p-4 ${
+                          <div key={idx} className={`rounded-xl border p-5 ${
                             founder.overallAssessment === "green"
                               ? "border-emerald-500/20 bg-emerald-500/5"
                               : founder.overallAssessment === "yellow"
                                 ? "border-amber-500/20 bg-amber-500/5"
                                 : "border-rose-500/20 bg-rose-500/5"
                           }`}>
-                            <div className="flex items-center gap-2.5 mb-3">
-                              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
                                 founder.overallAssessment === "green"
                                   ? "bg-emerald-500/15"
                                   : founder.overallAssessment === "yellow"
                                     ? "bg-amber-500/15"
                                     : "bg-rose-500/15"
                               }`}>
-                                <UserCheck className={`h-4 w-4 ${
+                                <UserCheck className={`h-5 w-5 ${
                                   founder.overallAssessment === "green"
                                     ? "text-emerald-400"
                                     : founder.overallAssessment === "yellow"
@@ -1762,11 +1762,11 @@ export default function Home() {
                                 }`} />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h3 className="text-sm font-bold truncate">{founder.name}</h3>
+                                <h3 className="text-base font-bold truncate">{founder.name}</h3>
                               </div>
                               <Badge
                                 variant="outline"
-                                className={`text-[10px] px-1.5 py-0 ${
+                                className={`text-xs px-2 py-0.5 ${
                                   founder.overallAssessment === "green"
                                     ? "border-emerald-500/40 text-emerald-400"
                                     : founder.overallAssessment === "yellow"
@@ -1777,17 +1777,17 @@ export default function Home() {
                                 {founder.overallAssessment === "green" ? "✓ CLEAR" : founder.overallAssessment === "yellow" ? "⚠ CAUTION" : "✗ FLAG"}
                               </Badge>
                             </div>
-                            <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{founder.linkedinSummary}</p>
+                            <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{founder.linkedinSummary}</p>
 
                             {/* Prior Ventures */}
                             {founder.priorVentures.length > 0 && (
                               <div className="mb-2">
-                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
-                                  <Building className="h-3 w-3" /> Prior Ventures
+                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                  <Building className="h-4 w-4" /> Prior Ventures
                                 </p>
                                 <ul className="space-y-0.5">
                                   {founder.priorVentures.map((v, i) => (
-                                    <li key={i} className="text-xs text-foreground/80">{v}</li>
+                                    <li key={i} className="text-sm text-foreground/80">{v}</li>
                                   ))}
                                 </ul>
                               </div>
@@ -1796,12 +1796,12 @@ export default function Home() {
                             {/* Achievements */}
                             {founder.notableAchievements.length > 0 && (
                               <div className="mb-2">
-                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
-                                  <Sparkles className="h-3 w-3" /> Achievements
+                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                  <Sparkles className="h-4 w-4" /> Achievements
                                 </p>
                                 <ul className="space-y-0.5">
                                   {founder.notableAchievements.map((a, i) => (
-                                    <li key={i} className="text-xs text-foreground/80">{a}</li>
+                                    <li key={i} className="text-sm text-foreground/80">{a}</li>
                                   ))}
                                 </ul>
                               </div>
@@ -1810,12 +1810,12 @@ export default function Home() {
                             {/* Red Flags */}
                             {founder.redFlags.length > 0 && (
                               <div>
-                                <p className="text-[10px] font-semibold text-rose-400 uppercase tracking-wider mb-1 flex items-center gap-1">
-                                  <Flag className="h-3 w-3" /> Red Flags
+                                <p className="text-xs font-semibold text-rose-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                  <Flag className="h-4 w-4" /> Red Flags
                                 </p>
                                 <ul className="space-y-0.5">
                                   {founder.redFlags.map((f, i) => (
-                                    <li key={i} className="text-xs text-rose-300">{f}</li>
+                                    <li key={i} className="text-sm text-rose-300">{f}</li>
                                   ))}
                                 </ul>
                               </div>
@@ -1827,27 +1827,27 @@ export default function Home() {
 
                     {/* Company Registry Check */}
                     <div>
-                      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Company Registry</h4>
-                      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
+                      <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Company Registry</h4>
+                      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5">
                         <div className="grid grid-cols-2 gap-3">
-                          <div className="rounded-lg bg-background/50 px-3 py-2">
-                            <p className="text-[10px] font-medium text-muted-foreground">Companies House (UK)</p>
-                            <p className="text-xs">{activeDeal.sourceData.founderIntel.companyCheck.companiesHouse}</p>
+                          <div className="rounded-lg bg-background/50 px-4 py-3">
+                            <p className="text-xs font-medium text-muted-foreground">Companies House (UK)</p>
+                            <p className="text-sm">{activeDeal.sourceData.founderIntel.companyCheck.companiesHouse}</p>
                           </div>
-                          <div className="rounded-lg bg-background/50 px-3 py-2">
-                            <p className="text-[10px] font-medium text-muted-foreground">SEC EDGAR (US)</p>
-                            <p className="text-xs">{activeDeal.sourceData.founderIntel.companyCheck.secEdgar}</p>
+                          <div className="rounded-lg bg-background/50 px-4 py-3">
+                            <p className="text-xs font-medium text-muted-foreground">SEC EDGAR (US)</p>
+                            <p className="text-sm">{activeDeal.sourceData.founderIntel.companyCheck.secEdgar}</p>
                           </div>
-                          <div className="rounded-lg bg-background/50 px-3 py-2 col-span-2">
-                            <p className="text-[10px] font-medium text-muted-foreground">Incorporation Status</p>
-                            <p className="text-xs font-semibold">{activeDeal.sourceData.founderIntel.companyCheck.incorporationStatus}</p>
+                          <div className="rounded-lg bg-background/50 px-4 py-3 col-span-2">
+                            <p className="text-xs font-medium text-muted-foreground">Incorporation Status</p>
+                            <p className="text-sm font-semibold">{activeDeal.sourceData.founderIntel.companyCheck.incorporationStatus}</p>
                           </div>
                           {activeDeal.sourceData.founderIntel.companyCheck.filingFlags.length > 0 && (
-                            <div className="rounded-lg bg-background/50 px-3 py-2 col-span-2">
-                              <p className="text-[10px] font-medium text-amber-400">Filing Flags</p>
+                            <div className="rounded-lg bg-background/50 px-4 py-3 col-span-2">
+                              <p className="text-xs font-medium text-amber-400">Filing Flags</p>
                               <ul className="space-y-0.5 mt-1">
                                 {activeDeal.sourceData.founderIntel.companyCheck.filingFlags.map((f, i) => (
-                                  <li key={i} className="text-xs text-amber-300">{f}</li>
+                                  <li key={i} className="text-sm text-amber-300">{f}</li>
                                 ))}
                               </ul>
                             </div>
@@ -1859,13 +1859,13 @@ export default function Home() {
                     {/* Adverse Media & Inconsistencies */}
                     {activeDeal.sourceData.founderIntel.adverseMedia.length > 0 && (
                       <div>
-                        <h4 className="text-xs font-semibold text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                          <AlertCircle className="h-3 w-3" /> Adverse Media
+                        <h4 className="text-sm font-semibold text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                          <AlertCircle className="h-4 w-4" /> Adverse Media
                         </h4>
-                        <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4">
-                          <ul className="space-y-1.5">
+                        <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                          <ul className="space-y-2">
                             {activeDeal.sourceData.founderIntel.adverseMedia.map((item, i) => (
-                              <li key={i} className="text-xs text-rose-300/90 flex items-start gap-1.5">
+                              <li key={i} className="text-sm text-rose-300/90 flex items-start gap-2">
                                 <span className="mt-1.5 h-1 w-1 rounded-full bg-rose-400 shrink-0" />
                                 {item}
                               </li>
@@ -1877,13 +1877,13 @@ export default function Home() {
 
                     {activeDeal.sourceData.founderIntel.inconsistencies.length > 0 && (
                       <div>
-                        <h4 className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                          <Flag className="h-3 w-3" /> Inconsistencies
+                        <h4 className="text-sm font-semibold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                          <Flag className="h-4 w-4" /> Inconsistencies
                         </h4>
-                        <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
-                          <ul className="space-y-1.5">
+                        <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
+                          <ul className="space-y-2">
                             {activeDeal.sourceData.founderIntel.inconsistencies.map((item, i) => (
-                              <li key={i} className="text-xs text-amber-300/90 flex items-start gap-1.5">
+                              <li key={i} className="text-sm text-amber-300/90 flex items-start gap-2">
                                 <span className="mt-1.5 h-1 w-1 rounded-full bg-amber-400 shrink-0" />
                                 {item}
                               </li>
@@ -1895,9 +1895,9 @@ export default function Home() {
 
                     {/* All clear message */}
                     {activeDeal.sourceData.founderIntel.adverseMedia.length === 0 && activeDeal.sourceData.founderIntel.inconsistencies.length === 0 && (
-                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                        <p className="text-sm text-emerald-400 flex items-center gap-2">
-                          <CheckCircle className="h-4 w-4" />
+                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
+                        <p className="text-base text-emerald-400 flex items-center gap-2">
+                          <CheckCircle className="h-5 w-5" />
                           No adverse media or inconsistencies found
                         </p>
                       </div>
@@ -1906,15 +1906,15 @@ export default function Home() {
                     {/* Sources */}
                     {activeDeal.sourceData.founderIntel.sources.length > 0 && (
                       <div>
-                        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources</h4>
-                        <div className="flex flex-wrap gap-1.5">
+                        <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources</h4>
+                        <div className="flex flex-wrap gap-2">
                           {activeDeal.sourceData.founderIntel.sources.map((src, i) => (
                             <a
                               key={i}
                               href={src}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[10px] text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all"
+                              className="text-xs text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all"
                             >
                               {src.length > 50 ? src.slice(0, 50) + "…" : src}
                             </a>
@@ -1925,25 +1925,25 @@ export default function Home() {
                   </>
                 ) : isGenerating ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <div className="mb-4 rounded-full bg-rose-500/10 p-4">
-                      <Loader2 className="h-8 w-8 text-rose-400 animate-spin" />
+                    <div className="mb-4 rounded-full bg-rose-500/10 p-5">
+                      <Loader2 className="h-10 w-10 text-rose-400 animate-spin" />
                     </div>
-                    <p className="text-base font-medium text-muted-foreground/60">
+                    <p className="text-lg font-medium text-muted-foreground/60">
                       Running background check...
                     </p>
-                    <p className="text-sm text-muted-foreground/40 mt-2">
+                    <p className="text-base text-muted-foreground/40 mt-2">
                       Searching web for founder history,<br />registry records &amp; adverse media
                     </p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <div className="mb-4 rounded-full bg-muted/20 p-4">
-                      <ShieldAlert className="h-8 w-8 text-muted-foreground/20" />
+                    <div className="mb-4 rounded-full bg-muted/20 p-5">
+                      <ShieldAlert className="h-10 w-10 text-muted-foreground/20" />
                     </div>
-                    <p className="text-base font-medium text-muted-foreground/50">
+                    <p className="text-lg font-medium text-muted-foreground/50">
                       No founder intel yet
                     </p>
-                    <p className="text-sm text-muted-foreground/30 mt-2">
+                    <p className="text-base text-muted-foreground/30 mt-2">
                       Background check will appear here<br />after analysis completes
                     </p>
                   </div>
@@ -1953,9 +1953,9 @@ export default function Home() {
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
               <div className="mb-4 rounded-full bg-muted/20 p-5">
-                <ShieldAlert className="h-8 w-8 text-muted-foreground/20" />
+                <ShieldAlert className="h-10 w-10 text-muted-foreground/20" />
               </div>
-              <h3 className="text-lg font-semibold text-muted-foreground/40">Founder Intel</h3>
+              <h3 className="text-xl font-semibold text-muted-foreground/40">Founder Intel</h3>
               <p className="mt-3 text-base leading-relaxed text-muted-foreground/30">
                 Generate a memo to run<br />founder background checks
               </p>
@@ -1968,44 +1968,44 @@ export default function Home() {
       {/* Chat Toggle Button */}
       <button
         onClick={() => setChatOpen(!chatOpen)}
-        className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg shadow-violet-500/25 transition-all hover:scale-105 ${
+        className={`fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full shadow-lg shadow-violet-500/25 transition-all hover:scale-105 ${
           chatOpen
             ? "bg-muted/80 text-muted-foreground rotate-0"
             : "bg-violet-600 text-white"
         }`}
       >
-        {chatOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+        {chatOpen ? <X className="h-7 w-7" /> : <MessageCircle className="h-7 w-7" />}
       </button>
 
       {/* Chat Popup */}
       {chatOpen && (
-        <div className="fixed bottom-24 right-6 z-50 flex w-[400px] max-h-[600px] flex-col rounded-2xl border-2 border-border/50 bg-background shadow-2xl shadow-black/30 overflow-hidden">
+        <div className="fixed bottom-24 right-6 z-50 flex w-[440px] max-h-[650px] flex-col rounded-2xl border-2 border-border/50 bg-background shadow-2xl shadow-black/30 overflow-hidden">
           {/* Chat Popup Header */}
           <div className="flex items-center gap-3 border-b border-border/40 px-5 py-4 bg-card/50">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15">
-              <Bot className="h-5 w-5 text-violet-400" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-500/15">
+              <Bot className="h-6 w-6 text-violet-400" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-bold truncate">
+              <h3 className="text-base font-bold truncate">
                 {activeDeal ? `Ask about ${activeDeal.companyName}` : "Deal Assistant"}
               </h3>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {activeDeal ? "AI-powered Q&A" : "Generate a memo first"}
               </p>
             </div>
             <button onClick={() => setChatOpen(false)} className="text-muted-foreground hover:text-foreground">
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px] max-h-[440px]">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px] max-h-[480px]">
             {!activeDeal || !activeMemo ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <div className="mb-4 rounded-full bg-violet-500/10 p-4">
-                  <Bot className="h-8 w-8 text-violet-400/50" />
+                  <Bot className="h-10 w-10 text-violet-400/50" />
                 </div>
-                <p className="text-sm text-muted-foreground/60">
+                <p className="text-base text-muted-foreground/60">
                   Generate a memo to start<br />chatting about the deal
                 </p>
               </div>
@@ -2014,9 +2014,9 @@ export default function Home() {
                 {(!activeDeal.chatHistory || activeDeal.chatHistory.length === 0) && !isChatting && (
                   <div className="flex flex-col items-center justify-center py-8 text-center">
                     <div className="mb-4 rounded-full bg-violet-500/10 p-4">
-                      <Bot className="h-8 w-8 text-violet-400/50" />
+                      <Bot className="h-10 w-10 text-violet-400/50" />
                     </div>
-                    <p className="text-sm font-medium text-muted-foreground/60">
+                    <p className="text-base font-medium text-muted-foreground/60">
                       Ask anything about {activeDeal.companyName}
                     </p>
                     <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -2024,7 +2024,7 @@ export default function Home() {
                         <button
                           key={q}
                           onClick={() => { setChatInput(q); }}
-                          className="rounded-full border border-border/40 bg-muted/20 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-violet-500/10 hover:text-violet-400 hover:border-violet-500/30"
+                          className="rounded-full border border-border/40 bg-muted/20 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-violet-500/10 hover:text-violet-400 hover:border-violet-500/30"
                         >
                           {q}
                         </button>
@@ -2035,22 +2035,22 @@ export default function Home() {
                 {activeDeal.chatHistory?.map((msg, i) => (
                   <div
                     key={i}
-                    className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {msg.role === "assistant" && (
-                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
-                        <Bot className="h-4 w-4 text-violet-400" />
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
+                        <Bot className="h-5 w-5 text-violet-400" />
                       </div>
                     )}
                     <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                      className={`max-w-[80%] rounded-2xl px-4 py-3 text-base leading-relaxed ${
                         msg.role === "user"
                           ? "bg-violet-600 text-white"
                           : "bg-muted/40 text-foreground"
                       }`}
                     >
                       {msg.role === "assistant" ? (
-                        <div className="prose dark:prose-invert prose-sm max-w-none prose-p:my-1 prose-p:text-sm prose-p:leading-relaxed prose-li:text-sm">
+                        <div className="prose dark:prose-invert prose-base max-w-none prose-p:my-1 prose-p:text-base prose-p:leading-relaxed prose-li:text-base">
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {msg.content}
                           </ReactMarkdown>
@@ -2060,21 +2060,21 @@ export default function Home() {
                       )}
                     </div>
                     {msg.role === "user" && (
-                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted/40">
-                        <User className="h-4 w-4 text-muted-foreground" />
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted/40">
+                        <User className="h-5 w-5 text-muted-foreground" />
                       </div>
                     )}
                   </div>
                 ))}
                 {isChatting && (
-                  <div className="flex gap-2">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
-                      <Bot className="h-4 w-4 text-violet-400" />
+                  <div className="flex gap-2.5">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
+                      <Bot className="h-5 w-5 text-violet-400" />
                     </div>
-                    <div className="flex items-center gap-1.5 rounded-2xl bg-muted/40 px-4 py-3">
-                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "0ms" }} />
-                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "150ms" }} />
-                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "300ms" }} />
+                    <div className="flex items-center gap-2 rounded-2xl bg-muted/40 px-4 py-3">
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "0ms" }} />
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "150ms" }} />
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "300ms" }} />
                     </div>
                   </div>
                 )}
@@ -2094,16 +2094,16 @@ export default function Home() {
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   placeholder="Ask a question..."
-                  className="flex-1 rounded-xl border border-border/40 bg-muted/10 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-violet-500/50 focus:outline-none focus:ring-1 focus:ring-violet-500/20"
+                  className="flex-1 rounded-xl border border-border/40 bg-muted/10 px-4 py-3 text-base text-foreground placeholder:text-muted-foreground/40 focus:border-violet-500/50 focus:outline-none focus:ring-1 focus:ring-violet-500/20"
                   disabled={isChatting}
                 />
                 <Button
                   type="submit"
                   size="sm"
-                  className="gap-1.5 rounded-xl px-4 py-3"
+                  className="gap-2 rounded-xl px-4 py-3"
                   disabled={!chatInput.trim() || isChatting}
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-5 w-5" />
                 </Button>
               </form>
             </div>
