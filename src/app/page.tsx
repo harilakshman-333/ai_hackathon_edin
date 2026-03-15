@@ -226,6 +226,7 @@ export default function Home() {
   const [isResearching, setIsResearching] = useState(false);
   const [researchResults, setResearchResults] = useState<ResearchResult[]>([]);
   const [activeResearchIndex, setActiveResearchIndex] = useState<number | null>(null);
+  const [chatOpen, setChatOpen] = useState(false);
 
   // Keep refs in sync so the interval callback sees latest values
   useEffect(() => { autoScanRef.current = autoScan; }, [autoScan]);
@@ -1073,233 +1074,6 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* ===== FOUNDER INTEL SECTION ===== */}
-                {activeDeal?.sourceData?.founderIntel && (
-                  <div className="mt-16 border-t-2 border-border/30 pt-10">
-                    <h2 className="text-2xl font-bold tracking-tight flex items-center gap-3 mb-3">
-                      <ShieldAlert className="h-7 w-7 text-rose-400" />
-                      Founder Intel &amp; Background Check
-                    </h2>
-                    <div className="flex items-center gap-3 mb-8">
-                      <p className="text-lg text-muted-foreground leading-relaxed">
-                        Independent verification via Claude web search — cross-referencing public records, news, and registries.
-                      </p>
-                      <Badge
-                        variant="outline"
-                        className={`text-sm px-3 py-1 whitespace-nowrap ${
-                          activeDeal.sourceData.founderIntel.overallRiskLevel === "low"
-                            ? "border-emerald-500/40 text-emerald-400"
-                            : activeDeal.sourceData.founderIntel.overallRiskLevel === "medium"
-                              ? "border-amber-500/40 text-amber-400"
-                              : "border-rose-500/40 text-rose-400"
-                        }`}
-                      >
-                        {activeDeal.sourceData.founderIntel.overallRiskLevel === "low" ? "🟢" : activeDeal.sourceData.founderIntel.overallRiskLevel === "medium" ? "🟡" : "🔴"}{" "}
-                        {activeDeal.sourceData.founderIntel.overallRiskLevel.toUpperCase()} RISK
-                      </Badge>
-                    </div>
-
-                    {/* Summary */}
-                    <div className="rounded-xl border border-slate-500/20 bg-slate-500/5 p-6 mb-6">
-                      <p className="text-lg leading-relaxed">{activeDeal.sourceData.founderIntel.summary}</p>
-                    </div>
-
-                    {/* Founder Profiles */}
-                    {activeDeal.sourceData.founderIntel.founders.length > 0 && (
-                      <div className="grid gap-4 mb-6">
-                        {activeDeal.sourceData.founderIntel.founders.map((founder, idx) => (
-                          <div key={idx} className={`rounded-xl border p-6 ${
-                            founder.overallAssessment === "green"
-                              ? "border-emerald-500/20 bg-emerald-500/5"
-                              : founder.overallAssessment === "yellow"
-                                ? "border-amber-500/20 bg-amber-500/5"
-                                : "border-rose-500/20 bg-rose-500/5"
-                          }`}>
-                            <div className="flex items-center gap-3 mb-4">
-                              <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                                founder.overallAssessment === "green"
-                                  ? "bg-emerald-500/15"
-                                  : founder.overallAssessment === "yellow"
-                                    ? "bg-amber-500/15"
-                                    : "bg-rose-500/15"
-                              }`}>
-                                <UserCheck className={`h-5 w-5 ${
-                                  founder.overallAssessment === "green"
-                                    ? "text-emerald-400"
-                                    : founder.overallAssessment === "yellow"
-                                      ? "text-amber-400"
-                                      : "text-rose-400"
-                                }`} />
-                              </div>
-                              <div className="flex-1">
-                                <h3 className="text-lg font-bold">{founder.name}</h3>
-                                <p className="text-base text-muted-foreground">{founder.linkedinSummary}</p>
-                              </div>
-                              <Badge
-                                variant="outline"
-                                className={`text-xs px-2 py-0.5 ${
-                                  founder.overallAssessment === "green"
-                                    ? "border-emerald-500/40 text-emerald-400"
-                                    : founder.overallAssessment === "yellow"
-                                      ? "border-amber-500/40 text-amber-400"
-                                      : "border-rose-500/40 text-rose-400"
-                                }`}
-                              >
-                                {founder.overallAssessment === "green" ? "✓ CLEAR" : founder.overallAssessment === "yellow" ? "⚠ CAUTION" : "✗ FLAG"}
-                              </Badge>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                              {/* Prior Ventures */}
-                              {founder.priorVentures.length > 0 && (
-                                <div className="rounded-lg bg-background/50 px-4 py-3">
-                                  <p className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
-                                    <Building className="h-3.5 w-3.5" /> Prior Ventures
-                                  </p>
-                                  <ul className="space-y-1">
-                                    {founder.priorVentures.map((v, i) => (
-                                      <li key={i} className="text-sm">{v}</li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-
-                              {/* Achievements */}
-                              {founder.notableAchievements.length > 0 && (
-                                <div className="rounded-lg bg-background/50 px-4 py-3">
-                                  <p className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
-                                    <Sparkles className="h-3.5 w-3.5" /> Notable Achievements
-                                  </p>
-                                  <ul className="space-y-1">
-                                    {founder.notableAchievements.map((a, i) => (
-                                      <li key={i} className="text-sm">{a}</li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-
-                              {/* Red Flags */}
-                              {founder.redFlags.length > 0 && (
-                                <div className="rounded-lg bg-background/50 px-4 py-3">
-                                  <p className="text-sm font-medium text-rose-400 mb-2 flex items-center gap-1.5">
-                                    <Flag className="h-3.5 w-3.5" /> Red Flags
-                                  </p>
-                                  <ul className="space-y-1">
-                                    {founder.redFlags.map((f, i) => (
-                                      <li key={i} className="text-sm text-rose-300">{f}</li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Company Registry Check */}
-                    <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-6 mb-6">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/15">
-                          <Building className="h-5 w-5 text-blue-400" />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-bold">Company Registry Verification</h3>
-                          <p className="text-base text-muted-foreground">Companies House (UK) &amp; SEC EDGAR (US)</p>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 mt-4">
-                        <div className="rounded-lg bg-background/50 px-4 py-3">
-                          <p className="text-sm font-medium text-muted-foreground">Companies House (UK)</p>
-                          <p className="text-base">{activeDeal.sourceData.founderIntel.companyCheck.companiesHouse}</p>
-                        </div>
-                        <div className="rounded-lg bg-background/50 px-4 py-3">
-                          <p className="text-sm font-medium text-muted-foreground">SEC EDGAR (US)</p>
-                          <p className="text-base">{activeDeal.sourceData.founderIntel.companyCheck.secEdgar}</p>
-                        </div>
-                        <div className="rounded-lg bg-background/50 px-4 py-3">
-                          <p className="text-sm font-medium text-muted-foreground">Incorporation Status</p>
-                          <p className="text-base font-semibold">{activeDeal.sourceData.founderIntel.companyCheck.incorporationStatus}</p>
-                        </div>
-                        {activeDeal.sourceData.founderIntel.companyCheck.filingFlags.length > 0 && (
-                          <div className="rounded-lg bg-background/50 px-4 py-3">
-                            <p className="text-sm font-medium text-amber-400">Filing Flags</p>
-                            <ul className="space-y-1 mt-1">
-                              {activeDeal.sourceData.founderIntel.companyCheck.filingFlags.map((f, i) => (
-                                <li key={i} className="text-sm text-amber-300">{f}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Adverse Media & Inconsistencies */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      {activeDeal.sourceData.founderIntel.adverseMedia.length > 0 && (
-                        <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-6">
-                          <h3 className="text-lg font-bold text-rose-400 mb-3 flex items-center gap-2">
-                            <AlertCircle className="h-5 w-5" /> Adverse Media
-                          </h3>
-                          <ul className="space-y-2">
-                            {activeDeal.sourceData.founderIntel.adverseMedia.map((item, i) => (
-                              <li key={i} className="text-base text-rose-300/90 flex items-start gap-2">
-                                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-rose-400 shrink-0" />
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {activeDeal.sourceData.founderIntel.inconsistencies.length > 0 && (
-                        <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-6">
-                          <h3 className="text-lg font-bold text-amber-400 mb-3 flex items-center gap-2">
-                            <Flag className="h-5 w-5" /> Inconsistencies
-                          </h3>
-                          <ul className="space-y-2">
-                            {activeDeal.sourceData.founderIntel.inconsistencies.map((item, i) => (
-                              <li key={i} className="text-base text-amber-300/90 flex items-start gap-2">
-                                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* No adverse media / inconsistencies = good sign */}
-                    {activeDeal.sourceData.founderIntel.adverseMedia.length === 0 && activeDeal.sourceData.founderIntel.inconsistencies.length === 0 && (
-                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-6 mb-6">
-                        <p className="text-lg text-emerald-400 flex items-center gap-2">
-                          <CheckCircle className="h-5 w-5" />
-                          No adverse media or deck-vs-reality inconsistencies found
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Sources */}
-                    {activeDeal.sourceData.founderIntel.sources.length > 0 && (
-                      <div className="mt-6">
-                        <p className="text-sm font-medium text-muted-foreground mb-2">Sources</p>
-                        <div className="flex flex-wrap gap-2">
-                          {activeDeal.sourceData.founderIntel.sources.map((src, i) => (
-                            <a
-                              key={i}
-                              href={src}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all"
-                            >
-                              {src.length > 60 ? src.slice(0, 60) + "…" : src}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
                 </>
               ) : isGenerating ? (
                 <div className="space-y-8 py-4">
@@ -1920,37 +1694,337 @@ export default function Home() {
           )}
         </main>
 
-        {/* ===== RIGHT SIDEBAR: Chatbot ===== */}
+        {/* ===== RIGHT SIDEBAR: Founder Intel ===== */}
         <aside className={`flex w-[440px] shrink-0 flex-col border-l-2 border-border/50 bg-card/20 transition-all ${activeDeal && activeMemo ? "" : "hidden xl:flex"}`}>
           {activeDeal && activeMemo ? (
             <>
-              {/* Chat Header */}
+              {/* Founder Intel Header */}
               <div className="flex items-center gap-4 border-b-2 border-border/40 px-6 py-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/15">
-                  <MessageCircle className="h-6 w-6 text-violet-400" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-500/15">
+                  <ShieldAlert className="h-6 w-6 text-rose-400" />
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-bold truncate">Ask about {activeDeal.companyName}</h3>
-                  <p className="text-base text-muted-foreground">AI-powered Q&A on this deal</p>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg font-bold truncate">Founder Intel</h3>
+                  <p className="text-base text-muted-foreground">Background check &amp; verification</p>
                 </div>
+                {activeDeal.sourceData?.founderIntel && (
+                  <Badge
+                    variant="outline"
+                    className={`text-xs px-2 py-0.5 whitespace-nowrap ${
+                      activeDeal.sourceData.founderIntel.overallRiskLevel === "low"
+                        ? "border-emerald-500/40 text-emerald-400"
+                        : activeDeal.sourceData.founderIntel.overallRiskLevel === "medium"
+                          ? "border-amber-500/40 text-amber-400"
+                          : "border-rose-500/40 text-rose-400"
+                    }`}
+                  >
+                    {activeDeal.sourceData.founderIntel.overallRiskLevel === "low" ? "🟢" : activeDeal.sourceData.founderIntel.overallRiskLevel === "medium" ? "🟡" : "🔴"}{" "}
+                    {activeDeal.sourceData.founderIntel.overallRiskLevel.toUpperCase()} RISK
+                  </Badge>
+                )}
               </div>
 
-              {/* Chat Messages */}
+              {/* Founder Intel Content */}
               <div className="flex-1 overflow-y-auto p-5 space-y-4">
-                {(!activeDeal.chatHistory || activeDeal.chatHistory.length === 0) && !isChatting && (
-                  <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <div className="mb-5 rounded-full bg-violet-500/10 p-5">
-                      <Bot className="h-10 w-10 text-violet-400/50" />
+                {activeDeal.sourceData?.founderIntel ? (
+                  <>
+                    {/* Summary */}
+                    <div className="rounded-xl border border-slate-500/20 bg-slate-500/5 p-4">
+                      <p className="text-sm leading-relaxed">{activeDeal.sourceData.founderIntel.summary}</p>
                     </div>
-                    <p className="text-lg font-medium text-muted-foreground/60">
-                      Ask anything about<br />{activeDeal.companyName}
+
+                    {/* Founder Profiles */}
+                    {activeDeal.sourceData.founderIntel.founders.length > 0 && (
+                      <div className="space-y-3">
+                        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Founder Profiles</h4>
+                        {activeDeal.sourceData.founderIntel.founders.map((founder, idx) => (
+                          <div key={idx} className={`rounded-xl border p-4 ${
+                            founder.overallAssessment === "green"
+                              ? "border-emerald-500/20 bg-emerald-500/5"
+                              : founder.overallAssessment === "yellow"
+                                ? "border-amber-500/20 bg-amber-500/5"
+                                : "border-rose-500/20 bg-rose-500/5"
+                          }`}>
+                            <div className="flex items-center gap-2.5 mb-3">
+                              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+                                founder.overallAssessment === "green"
+                                  ? "bg-emerald-500/15"
+                                  : founder.overallAssessment === "yellow"
+                                    ? "bg-amber-500/15"
+                                    : "bg-rose-500/15"
+                              }`}>
+                                <UserCheck className={`h-4 w-4 ${
+                                  founder.overallAssessment === "green"
+                                    ? "text-emerald-400"
+                                    : founder.overallAssessment === "yellow"
+                                      ? "text-amber-400"
+                                      : "text-rose-400"
+                                }`} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-sm font-bold truncate">{founder.name}</h3>
+                              </div>
+                              <Badge
+                                variant="outline"
+                                className={`text-[10px] px-1.5 py-0 ${
+                                  founder.overallAssessment === "green"
+                                    ? "border-emerald-500/40 text-emerald-400"
+                                    : founder.overallAssessment === "yellow"
+                                      ? "border-amber-500/40 text-amber-400"
+                                      : "border-rose-500/40 text-rose-400"
+                                }`}
+                              >
+                                {founder.overallAssessment === "green" ? "✓ CLEAR" : founder.overallAssessment === "yellow" ? "⚠ CAUTION" : "✗ FLAG"}
+                              </Badge>
+                            </div>
+                            <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{founder.linkedinSummary}</p>
+
+                            {/* Prior Ventures */}
+                            {founder.priorVentures.length > 0 && (
+                              <div className="mb-2">
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
+                                  <Building className="h-3 w-3" /> Prior Ventures
+                                </p>
+                                <ul className="space-y-0.5">
+                                  {founder.priorVentures.map((v, i) => (
+                                    <li key={i} className="text-xs text-foreground/80">{v}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Achievements */}
+                            {founder.notableAchievements.length > 0 && (
+                              <div className="mb-2">
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
+                                  <Sparkles className="h-3 w-3" /> Achievements
+                                </p>
+                                <ul className="space-y-0.5">
+                                  {founder.notableAchievements.map((a, i) => (
+                                    <li key={i} className="text-xs text-foreground/80">{a}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Red Flags */}
+                            {founder.redFlags.length > 0 && (
+                              <div>
+                                <p className="text-[10px] font-semibold text-rose-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                                  <Flag className="h-3 w-3" /> Red Flags
+                                </p>
+                                <ul className="space-y-0.5">
+                                  {founder.redFlags.map((f, i) => (
+                                    <li key={i} className="text-xs text-rose-300">{f}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Company Registry Check */}
+                    <div>
+                      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Company Registry</h4>
+                      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="rounded-lg bg-background/50 px-3 py-2">
+                            <p className="text-[10px] font-medium text-muted-foreground">Companies House (UK)</p>
+                            <p className="text-xs">{activeDeal.sourceData.founderIntel.companyCheck.companiesHouse}</p>
+                          </div>
+                          <div className="rounded-lg bg-background/50 px-3 py-2">
+                            <p className="text-[10px] font-medium text-muted-foreground">SEC EDGAR (US)</p>
+                            <p className="text-xs">{activeDeal.sourceData.founderIntel.companyCheck.secEdgar}</p>
+                          </div>
+                          <div className="rounded-lg bg-background/50 px-3 py-2 col-span-2">
+                            <p className="text-[10px] font-medium text-muted-foreground">Incorporation Status</p>
+                            <p className="text-xs font-semibold">{activeDeal.sourceData.founderIntel.companyCheck.incorporationStatus}</p>
+                          </div>
+                          {activeDeal.sourceData.founderIntel.companyCheck.filingFlags.length > 0 && (
+                            <div className="rounded-lg bg-background/50 px-3 py-2 col-span-2">
+                              <p className="text-[10px] font-medium text-amber-400">Filing Flags</p>
+                              <ul className="space-y-0.5 mt-1">
+                                {activeDeal.sourceData.founderIntel.companyCheck.filingFlags.map((f, i) => (
+                                  <li key={i} className="text-xs text-amber-300">{f}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Adverse Media & Inconsistencies */}
+                    {activeDeal.sourceData.founderIntel.adverseMedia.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                          <AlertCircle className="h-3 w-3" /> Adverse Media
+                        </h4>
+                        <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4">
+                          <ul className="space-y-1.5">
+                            {activeDeal.sourceData.founderIntel.adverseMedia.map((item, i) => (
+                              <li key={i} className="text-xs text-rose-300/90 flex items-start gap-1.5">
+                                <span className="mt-1.5 h-1 w-1 rounded-full bg-rose-400 shrink-0" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+
+                    {activeDeal.sourceData.founderIntel.inconsistencies.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                          <Flag className="h-3 w-3" /> Inconsistencies
+                        </h4>
+                        <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+                          <ul className="space-y-1.5">
+                            {activeDeal.sourceData.founderIntel.inconsistencies.map((item, i) => (
+                              <li key={i} className="text-xs text-amber-300/90 flex items-start gap-1.5">
+                                <span className="mt-1.5 h-1 w-1 rounded-full bg-amber-400 shrink-0" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* All clear message */}
+                    {activeDeal.sourceData.founderIntel.adverseMedia.length === 0 && activeDeal.sourceData.founderIntel.inconsistencies.length === 0 && (
+                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                        <p className="text-sm text-emerald-400 flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4" />
+                          No adverse media or inconsistencies found
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Sources */}
+                    {activeDeal.sourceData.founderIntel.sources.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources</h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {activeDeal.sourceData.founderIntel.sources.map((src, i) => (
+                            <a
+                              key={i}
+                              href={src}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[10px] text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all"
+                            >
+                              {src.length > 50 ? src.slice(0, 50) + "…" : src}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : isGenerating ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <div className="mb-4 rounded-full bg-rose-500/10 p-4">
+                      <Loader2 className="h-8 w-8 text-rose-400 animate-spin" />
+                    </div>
+                    <p className="text-base font-medium text-muted-foreground/60">
+                      Running background check...
                     </p>
-                    <div className="mt-6 flex flex-wrap justify-center gap-3">
+                    <p className="text-sm text-muted-foreground/40 mt-2">
+                      Searching web for founder history,<br />registry records &amp; adverse media
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <div className="mb-4 rounded-full bg-muted/20 p-4">
+                      <ShieldAlert className="h-8 w-8 text-muted-foreground/20" />
+                    </div>
+                    <p className="text-base font-medium text-muted-foreground/50">
+                      No founder intel yet
+                    </p>
+                    <p className="text-sm text-muted-foreground/30 mt-2">
+                      Background check will appear here<br />after analysis completes
+                    </p>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
+              <div className="mb-4 rounded-full bg-muted/20 p-5">
+                <ShieldAlert className="h-8 w-8 text-muted-foreground/20" />
+              </div>
+              <h3 className="text-lg font-semibold text-muted-foreground/40">Founder Intel</h3>
+              <p className="mt-3 text-base leading-relaxed text-muted-foreground/30">
+                Generate a memo to run<br />founder background checks
+              </p>
+            </div>
+          )}
+        </aside>
+      </div>
+
+      {/* ===== FLOATING CHATBOT ===== */}
+      {/* Chat Toggle Button */}
+      <button
+        onClick={() => setChatOpen(!chatOpen)}
+        className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg shadow-violet-500/25 transition-all hover:scale-105 ${
+          chatOpen
+            ? "bg-muted/80 text-muted-foreground rotate-0"
+            : "bg-violet-600 text-white"
+        }`}
+      >
+        {chatOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+      </button>
+
+      {/* Chat Popup */}
+      {chatOpen && (
+        <div className="fixed bottom-24 right-6 z-50 flex w-[400px] max-h-[600px] flex-col rounded-2xl border-2 border-border/50 bg-background shadow-2xl shadow-black/30 overflow-hidden">
+          {/* Chat Popup Header */}
+          <div className="flex items-center gap-3 border-b border-border/40 px-5 py-4 bg-card/50">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15">
+              <Bot className="h-5 w-5 text-violet-400" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-sm font-bold truncate">
+                {activeDeal ? `Ask about ${activeDeal.companyName}` : "Deal Assistant"}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {activeDeal ? "AI-powered Q&A" : "Generate a memo first"}
+              </p>
+            </div>
+            <button onClick={() => setChatOpen(false)} className="text-muted-foreground hover:text-foreground">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px] max-h-[440px]">
+            {!activeDeal || !activeMemo ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="mb-4 rounded-full bg-violet-500/10 p-4">
+                  <Bot className="h-8 w-8 text-violet-400/50" />
+                </div>
+                <p className="text-sm text-muted-foreground/60">
+                  Generate a memo to start<br />chatting about the deal
+                </p>
+              </div>
+            ) : (
+              <>
+                {(!activeDeal.chatHistory || activeDeal.chatHistory.length === 0) && !isChatting && (
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <div className="mb-4 rounded-full bg-violet-500/10 p-4">
+                      <Bot className="h-8 w-8 text-violet-400/50" />
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground/60">
+                      Ask anything about {activeDeal.companyName}
+                    </p>
+                    <div className="mt-4 flex flex-wrap justify-center gap-2">
                       {["Key risks?", "Market size?", "Should I invest?"].map((q) => (
                         <button
                           key={q}
                           onClick={() => { setChatInput(q); }}
-                          className="rounded-full border border-border/40 bg-muted/20 px-5 py-2.5 text-base text-muted-foreground transition-colors hover:bg-violet-500/10 hover:text-violet-400 hover:border-violet-500/30"
+                          className="rounded-full border border-border/40 bg-muted/20 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-violet-500/10 hover:text-violet-400 hover:border-violet-500/30"
                         >
                           {q}
                         </button>
@@ -1961,22 +2035,22 @@ export default function Home() {
                 {activeDeal.chatHistory?.map((msg, i) => (
                   <div
                     key={i}
-                    className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {msg.role === "assistant" && (
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
-                        <Bot className="h-5 w-5 text-violet-400" />
+                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
+                        <Bot className="h-4 w-4 text-violet-400" />
                       </div>
                     )}
                     <div
-                      className={`max-w-[85%] rounded-2xl px-5 py-4 text-base leading-relaxed ${
+                      className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                         msg.role === "user"
                           ? "bg-violet-600 text-white"
                           : "bg-muted/40 text-foreground"
                       }`}
                     >
                       {msg.role === "assistant" ? (
-                        <div className="prose dark:prose-invert prose-base max-w-none prose-p:my-1.5 prose-p:text-base prose-p:leading-relaxed prose-li:text-base">
+                        <div className="prose dark:prose-invert prose-sm max-w-none prose-p:my-1 prose-p:text-sm prose-p:leading-relaxed prose-li:text-sm">
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {msg.content}
                           </ReactMarkdown>
@@ -1986,64 +2060,56 @@ export default function Home() {
                       )}
                     </div>
                     {msg.role === "user" && (
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted/40">
-                        <User className="h-5 w-5 text-muted-foreground" />
+                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted/40">
+                        <User className="h-4 w-4 text-muted-foreground" />
                       </div>
                     )}
                   </div>
                 ))}
                 {isChatting && (
-                  <div className="flex gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
-                      <Bot className="h-5 w-5 text-violet-400" />
+                  <div className="flex gap-2">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
+                      <Bot className="h-4 w-4 text-violet-400" />
                     </div>
-                    <div className="flex items-center gap-2 rounded-2xl bg-muted/40 px-5 py-4">
-                      <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "0ms" }} />
-                      <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "150ms" }} />
-                      <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "300ms" }} />
+                    <div className="flex items-center gap-1.5 rounded-2xl bg-muted/40 px-4 py-3">
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "0ms" }} />
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "150ms" }} />
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "300ms" }} />
                     </div>
                   </div>
                 )}
-              </div>
+              </>
+            )}
+          </div>
 
-              {/* Chat Input */}
-              <div className="border-t-2 border-border/40 p-6">
-                <form
-                  onSubmit={(e) => { e.preventDefault(); handleChat(); }}
-                  className="flex gap-3"
+          {/* Chat Input */}
+          {activeDeal && activeMemo && (
+            <div className="border-t border-border/40 p-4">
+              <form
+                onSubmit={(e) => { e.preventDefault(); handleChat(); }}
+                className="flex gap-2"
+              >
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder="Ask a question..."
+                  className="flex-1 rounded-xl border border-border/40 bg-muted/10 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-violet-500/50 focus:outline-none focus:ring-1 focus:ring-violet-500/20"
+                  disabled={isChatting}
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="gap-1.5 rounded-xl px-4 py-3"
+                  disabled={!chatInput.trim() || isChatting}
                 >
-                  <input
-                    type="text"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Ask a question..."
-                    className="flex-1 rounded-xl border border-border/40 bg-muted/10 px-5 py-4 text-lg text-foreground placeholder:text-muted-foreground/40 focus:border-violet-500/50 focus:outline-none focus:ring-1 focus:ring-violet-500/20"
-                    disabled={isChatting}
-                  />
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="gap-2 rounded-xl px-5 py-4"
-                    disabled={!chatInput.trim() || isChatting}
-                  >
-                    <Send className="h-5 w-5" />
-                  </Button>
-                </form>
-              </div>
-            </>
-          ) : (
-            <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
-              <div className="mb-4 rounded-full bg-muted/20 p-5">
-                <MessageCircle className="h-8 w-8 text-muted-foreground/20" />
-              </div>
-              <h3 className="text-lg font-semibold text-muted-foreground/40">Deal Assistant</h3>
-              <p className="mt-3 text-base leading-relaxed text-muted-foreground/30">
-                Generate a memo to start<br />chatting about the deal
-              </p>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
             </div>
           )}
-        </aside>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
